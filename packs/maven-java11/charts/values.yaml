@@ -9,6 +9,18 @@ image:
 
 # define environment variables here as a map of key: value
 env:
+  SERVER_SERVLET_CONTEXT_PATH: '{{ tpl .Values.ingress.path $ | default "" }}'
+
+extraEnv: []
+#- name: SECRET_VAR
+#  valueFrom: 
+#    secretKeyRef:
+#      name: mysecret
+#      key: username
+
+envFrom: [] 
+# - secretRef:
+#     name: fameos-social-twitter
 
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false
@@ -50,21 +62,25 @@ service:
   internalPort: 8080
   annotations:
     fabric8.io/expose: "true"
-    fabric8.io/ingress.annotations: "kubernetes.io/ingress.class: nginx"
+    fabric8.io/host.name: app
+    fabric8.io/ingress.path: '{{ tpl .Values.ingress.path . | default "/" }}'
+    fabric8.io/ingress.annotations: |-
+      {{- $annotations := .Values.ingress.annotations }}
+      {{- range $pkey, $pval := $annotations }}
+      {{ $pkey }}: {{ tpl (toString $pval) $ }}
+      {{- end }}
 resources:
-  limits:
-    cpu: 500m
-    memory: 512Mi
   requests:
     cpu: 400m
     memory: 512Mi
-probePath: /actuator/health
+probePath: '{{ tp .Values.ingress.path $ | default "" }}/actuator/health'
 livenessProbe:
   initialDelaySeconds: 60
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
 readinessProbe:
+  initialDelaySeconds: 60
   failureThreshold: 1
   periodSeconds: 10
   successThreshold: 1
@@ -73,8 +89,12 @@ readinessProbe:
 
 # custom ingress annotations on this service
 ingress:
+  enabled: false
+  path: /REPLACE_ME_APP_NAME
   annotations:
-#      kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
 
 # values we use from the `jx-requirements.yml` file if we are using helmfile and helm 3
 jxRequirements:

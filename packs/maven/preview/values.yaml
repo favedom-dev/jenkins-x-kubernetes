@@ -7,6 +7,8 @@ expose:
     exposer: Ingress
     http: true
     tlsacme: false
+    urltemplate: '{{.Namespace}}.{{.Domain}}'
+    tlsSecretName: 
 
 cleanup:
   Args:

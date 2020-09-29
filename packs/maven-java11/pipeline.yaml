@@ -4,3 +4,13 @@ agent:
   label: jenkins-maven-java11
   image: maven-java11
   container: maven
+pipelineConfig:
+  pipelines:
+    pullRequest:
+      promote:
+        replace: true
+        steps:
+        - dir: charts/preview
+          steps: 
+          - command: make preview
+          - command: 'jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../..'

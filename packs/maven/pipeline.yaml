@@ -19,7 +19,7 @@ pipelines:
         steps:
         - sh: make preview
           name: make-preview
-        - sh: jx preview --app $APP_NAME --dir ../..
+        - sh: jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../..
           name: jx-preview
 
   release:
