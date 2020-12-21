@@ -6,6 +6,9 @@ agent:
   container: gcr.io/jenkinsxio/builder-go
 pipelines:
   release:
+    setup:
+      steps:
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     build:
       steps:
         - dir: env
@@ -14,6 +17,9 @@ pipelines:
               name: helm-apply
 
   pullRequest:
+    setup:
+      steps:
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     build:
       steps:
         - dir: env
