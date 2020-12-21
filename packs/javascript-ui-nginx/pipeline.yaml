@@ -3,6 +3,9 @@ extends:
   file: javascript/pipeline.yaml
 pipelines:
   pullRequest:
+    setup:
+      steps:
+        - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     build:
       steps:
       - sh: npm run build
@@ -23,6 +26,9 @@ pipelines:
           name: jx-preview
 
   release:
+    setup:
+      steps:
+        - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     build:
       steps:
       - sh: npm run build
