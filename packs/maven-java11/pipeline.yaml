@@ -7,10 +7,13 @@ agent:
 pipelineConfig:
   pipelines:
     pullRequest:
+      setup:
+        steps:
+        - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
       promote:
         replace: true
         steps:
         - dir: charts/preview
-          steps: 
+          steps:
           - command: make preview
           - command: 'jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../..'
