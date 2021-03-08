@@ -58,7 +58,7 @@ pipelines:
             jx step create pr regex \
               --regex "\n.*name:.*$APP_NAME\n.*version:.*(?P<version>.*)\n" \
               --version v\$(cat ../../VERSION) \
-              --files helm/helmfile.yaml \
+              --files helmfile.yaml \
               --repo $PROMOTE_REPO_URL \
               --base helmfile-db-jobs --skip-auto-merge
           name: jx-promote
