@@ -56,8 +56,8 @@ pipelines:
         - comment: promote through all 'Auto' promotion Environments
           sh: |
             jx step create pr regex \
-              --regex "^.*- name:.*$APP_NAME\n.*version:(?P<version>.*)\$" \
-              --version v\$(cat ../../VERSION) \
+              --regex "^.*- name:.*$APP_NAME\n.*version: (?P<version>.*)\$" \
+              --version \$(cat ../../VERSION) \
               --files helmfile.yaml \
               --repo $PROMOTE_REPO_URL \
               --base helmfile-db-jobs --skip-auto-merge
