@@ -4,10 +4,10 @@ extends:
 agent:
   label: jenkins-maven
   container: maven
+env:
+  - name: PROMOTE_REPO_URL
+    value: https://github.com/favedom-dev/environment-favedom-dev-staging.git  
 pipelines:
-  env:
-    - name: PROMOTE_REPO_URL
-      value: https://github.com/favedom-dev/environment-favedom-dev-staging.git
   pullRequest:
     setup:
       steps:
