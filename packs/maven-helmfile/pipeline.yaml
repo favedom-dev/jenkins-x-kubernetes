@@ -1,6 +1,9 @@
 extends:
-  import: classic
-  file: maven/pipeline.yaml
+  file: ../maven/pipeline.yaml
+agent:
+  label: jenkins-maven-java11
+  image: maven-java11
+  container: maven
 pipelines:
   env:
     - name: PROMOTE_REPO_URL
@@ -27,7 +30,6 @@ pipelines:
           name: make-preview
         - sh: jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../..
           name: jx-preview
-
   release:
     setup:
       steps:
@@ -55,5 +57,6 @@ pipelines:
               --regex "\n.*name:.*$APP_NAME\n.*version:.*(?P<version>.*)$\n" \
               --version v\$(cat ../../VERSION) \
               --files helm/helmfile.yaml \
-              --repo $PROMOTE_REPO_URL
+              --repo $PROMOTE_REPO_URL \
+              --base helmfile-db-jobs --skip-auto-merge
           name: jx-promote
