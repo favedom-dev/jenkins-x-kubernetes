@@ -56,7 +56,7 @@ pipelines:
               --version v\$(cat ../../VERSION) \
               --files helmfile.yaml \
               --repo $PROMOTE_REPO_URL \
-              --base helmfile --skip-auto-merge
+              --base helmfile-db-jobs --skip-auto-merge
           name: jx-promote
 
 
