@@ -56,7 +56,7 @@ pipelines:
         - comment: promote through all 'Auto' promotion Environments
           sh: |
             jx step create pr regex \
-              --regex "\n.*name:.*$APP_NAME\n.*version:.*(?P<version>.*)$\n" \
+              --regex "\n.*name:.*$APP_NAME\n.*version:.*(?P<version>.*).*\n" \
               --version v\$(cat ../../VERSION) \
               --files helm/helmfile.yaml \
               --repo $PROMOTE_REPO_URL \
