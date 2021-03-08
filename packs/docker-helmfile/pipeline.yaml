@@ -1,0 +1,63 @@
+extends:
+  import: classic
+  file: pipeline.yaml
+agent:
+  label: jenkins-maven
+  container: maven
+pipelines:
+  env:
+    - name: PROMOTE_REPO_URL
+      value: https://github.com/favedom-dev/environment-favedom-dev-staging.git
+  pullRequest:
+    setup:
+      steps:
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable    
+    build:
+      steps:
+        - sh: skaffold version
+          name: skaffold-version
+        - sh: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
+          name: container-build
+        - dir: charts/REPLACE_ME_APP_NAME
+          steps:
+            - sh: jx step helm build
+              name: helm-build
+
+  release:
+    setup:
+      steps:
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable    
+    setVersion:
+      steps:
+        - sh: jx step next-version --use-git-tag-only --tag
+          name: tag-with-new-version
+    build:
+      steps:
+        - sh: export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml
+          name: container-build
+        - dir: charts/REPLACE_ME_APP_NAME
+          steps:
+            - sh: jx step helm build --verbose
+              name: helm-build
+              comment: Let's build chart
+    promote:
+      steps:
+      - dir: charts/REPLACE_ME_APP_NAME
+        steps:
+        - sh: jx step changelog --version v\$(cat ../../VERSION)
+          name: changelog
+        - comment: Let's release the helm chart
+          sh: jx step helm release
+          name: helm-release
+        - comment: promote to destination Helmfile environment repository
+          sh: |
+            jx step create pr regex \
+              --regex "\n.*name:.*$APP_NAME\n.*version:.*(?P<version>.*)$\n" \
+              --version v\$(cat ../../VERSION) \
+              --files helmfile.yaml \
+              --repo $PROMOTE_REPO_URL \
+              --base helmfile --skip-auto-merge
+          name: jx-promote
+
+
+
