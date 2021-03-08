@@ -1,5 +1,6 @@
 extends:
-  file: ../maven/pipeline.yaml
+  import: classic
+  file: maven/pipeline.yaml
 agent:
   label: jenkins-maven-java11
   image: maven-java11
@@ -30,6 +31,7 @@ pipelines:
           name: make-preview
         - sh: jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../..
           name: jx-preview
+
   release:
     setup:
       steps:
