@@ -8,7 +8,11 @@ image:
   pullPolicy: IfNotPresent
 
 # define environment variables here as a map of key: value
-env:
+env: {}
+
+extraEnv: []
+
+envFrom: []
 
 # enable this flag to use knative serve to deploy the app
 knativeDeploy: false

@@ -1,6 +1,8 @@
 OS := $(shell uname)
+TLS_SECRET := tls-favedom-dev-softcannery-com-p
+PREVIEW_NAMESPACE := $(shell tr '[:upper:]' '[:lower:]' <<< $(APP_NAME)-$(BRANCH_NAME))	
 
-preview: 
+preview: namespace tls-secret
 ifeq ($(OS),Darwin)
 	sed -i "" -e "s/version:.*/version: $(PREVIEW_VERSION)/" Chart.yaml
 	sed -i "" -e "s/version:.*/version: $(PREVIEW_VERSION)/" ../*/Chart.yaml
@@ -16,3 +18,9 @@ else
 endif
 	echo "  version: $(PREVIEW_VERSION)" >> requirements.yaml
 	jx step helm build
+
+namespace:
+	kubectl create ns $(PREVIEW_NAMESPACE) || true
+
+tls-secret:
+	kubectl get secret $(TLS_SECRET) --namespace=jx --export -o yaml | kubectl apply --namespace=$(PREVIEW_NAMESPACE) -f -

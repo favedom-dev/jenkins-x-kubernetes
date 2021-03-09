@@ -1,6 +1,9 @@
 extends:
   import: classic
   file: javascript/pipeline.yaml
+agent:
+  image: nodejs12x
+  label: jenkins-nodejs12x
 pipelines:
   pullRequest:
     setup:
@@ -22,7 +25,7 @@ pipelines:
         steps:
         - sh: make preview
           name: make-preview
-        - sh: jx preview --app $APP_NAME --dir ../..
+        - sh: "jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../.."
           name: jx-preview
 
   release:

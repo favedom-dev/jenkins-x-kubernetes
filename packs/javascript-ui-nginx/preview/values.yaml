@@ -5,8 +5,10 @@ expose:
     helm.sh/hook-delete-policy: hook-succeeded
   config:
     exposer: Ingress
-    http: true
-    tlsacme: false
+    http: false
+    tlsacme: true
+    urltemplate: "{{.Namespace}}.{{.Domain}}"
+    tlsSecretName: tls-favedom-dev-softcannery-com-p
 
 cleanup:
   Args:

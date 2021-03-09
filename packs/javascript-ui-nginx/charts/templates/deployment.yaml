@@ -32,7 +32,14 @@ spec:
         env:
 {{- range $pkey, $pval := .Values.env }}
         - name: {{ $pkey }}
-          value: {{ $pval }}
+          value: {{ tpl (toString ($pval | default "") ) $ | quote }}
+{{- end }}
+{{- if .Values.extraEnv }}
+{{ tpl (toYaml .Values.extraEnv) $ | indent 8 }}
+{{- end }}
+{{- if .Values.envFrom }}
+        envFrom:
+{{ tpl (toYaml .Values.envFrom) $ | indent 8 }}
 {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
