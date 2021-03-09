@@ -1,0 +1,63 @@
+extends:
+  import: classic
+  file: javascript/pipeline.yaml
+agent:
+  image: nodejs12x
+  label: jenkins-nodejs12x
+env:
+- name: PROMOTE_REPO_URL
+  value: https://github.com/favedom-dev/environment-favedom-dev-staging.git  
+pipelines:
+  pullRequest:
+    setup:
+      steps:
+        - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
+    build:
+      steps:
+      - sh: npm run build
+        name: ui-build
+      - sh: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
+        name: container-build
+    postBuild:
+      steps:
+      - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION
+        name: post-build
+    promote:
+      steps:
+      - dir: ./charts/preview
+        steps:
+        - sh: make preview
+          name: make-preview
+        - sh: "jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../.."
+          name: jx-preview
+
+  release:
+    setup:
+      steps:
+        - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
+    build:
+      steps:
+      - sh: npm run build
+        name: ui-build
+      - sh: export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml
+        name: container-build
+      - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)
+        name: post-build
+    promote:
+      steps:
+      - dir: ./charts/REPLACE_ME_APP_NAME
+        steps:
+        - sh: jx step changelog --batch-mode --version v\$(cat ../../VERSION)
+          name: changelog
+        - comment: release the helm chart
+          sh: jx step helm release
+          name: helm-release
+        - comment: promote to destination Helmfile environment repository
+          sh: |
+            jx step create pr regex \
+              --regex "^\s*- name:\s+$APP_NAME\n\s+version:\s+(?P<version>.*)\$" \
+              --version \$(cat ../../VERSION) \
+              --files helmfile.yaml \
+              --repo $PROMOTE_REPO_URL \
+              --base javascript-ui-nginx-helmfile --branch javascript-ui-nginx --skip-auto-merge
+          name: jx-promote
