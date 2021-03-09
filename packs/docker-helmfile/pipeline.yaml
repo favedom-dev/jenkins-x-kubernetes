@@ -6,12 +6,12 @@ agent:
   container: maven
 env:
   - name: PROMOTE_REPO_URL
-    value: https://github.com/favedom-dev/environment-favedom-dev-staging.git  
+    value: https://github.com/favedom-dev/environment-favedom-dev-staging.git
 pipelines:
   pullRequest:
     setup:
       steps:
-      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable    
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     build:
       steps:
         - sh: skaffold version
@@ -26,7 +26,7 @@ pipelines:
   release:
     setup:
       steps:
-      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable    
+      - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
     setVersion:
       steps:
         - sh: jx step next-version --use-git-tag-only --tag
