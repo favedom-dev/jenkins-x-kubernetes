@@ -58,6 +58,5 @@ pipelines:
               --regex "^\s*- name:\s+$APP_NAME\n\s+version:\s+(?P<version>.*)\$" \
               --version \$(cat ../../VERSION) \
               --files helmfile.yaml \
-              --repo $PROMOTE_REPO_URL \
-              --base javascript-ui-nginx-helmfile --branch javascript-ui-nginx-helmfile --skip-auto-merge
+              --repo $PROMOTE_REPO_URL 
           name: jx-promote
