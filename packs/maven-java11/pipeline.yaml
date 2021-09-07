@@ -2,7 +2,7 @@ extends:
   file: ../maven/pipeline.yaml
 agent:
   label: jenkins-maven-java11
-  image: maven-java11
+  image: gcr.io/favedom-dev/jenkins-x/builder-maven-java11:2.1.155-779-jx-patch
   container: maven
 pipelineConfig:
   pipelines:
