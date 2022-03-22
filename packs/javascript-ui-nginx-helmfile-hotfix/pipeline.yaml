@@ -13,7 +13,6 @@ pipelines:
       steps:
         - sh: helm init --client-only --stable-repo-url https://charts.helm.sh/stable
         - sh: jx step credential -s npmrc-token-nexus -k .npmrc -f ~/.npmrc --optional=true
-        - sh: sleep 2m
     build:
       steps:
       - sh: npm run build
