@@ -15,7 +15,7 @@ pipelines:
         - sh: jx step credential -s npmrc-token-nexus -k .npmrc -f ~/.npmrc --optional=true
     build:
       steps:
-      - sh: cd /apps/api && npm run build
+      - sh: cd ./apps/api && npm run build
         name: api-build
       - sh: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
         name: container-build
