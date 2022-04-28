@@ -17,8 +17,12 @@ pipelines:
       steps:
       - sh: cd ./apps/api && npm run build
         name: api-build
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
         name: container-build
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
     # postBuild:
     #   steps:
     #   - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION
