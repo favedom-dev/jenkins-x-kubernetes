@@ -15,6 +15,10 @@ pipelines:
         - sh: jx step credential -s npmrc-token-nexus -k .npmrc -f ~/.npmrc --optional=true
     build:
       steps:
+      - sh: sleep 6000
+        name: DEBUG-sleep
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: cd ./apps/api && npm run build
         name: api-build
         agent:
