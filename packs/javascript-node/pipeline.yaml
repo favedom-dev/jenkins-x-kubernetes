@@ -23,6 +23,10 @@ pipelines:
         name: api-build
         agent:
           image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
+      - sh: sleep 600
+        name: DEBUG-sleep
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: export VERSION=$PREVIEW_VERSION && skaffold build -f skaffold.yaml
         name: container-build
         agent:
