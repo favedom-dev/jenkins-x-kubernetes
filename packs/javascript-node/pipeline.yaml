@@ -35,12 +35,12 @@ pipelines:
       steps:
       - dir: ./charts/preview
         steps:
-        - sh: make preview
-          name: make-preview
         - sh: sleep 600
           name: DEBUG-sleep
           # agent:
           #   image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
+        - sh: make preview
+          name: make-preview
         - sh: "jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../.."
           name: jx-preview
 
