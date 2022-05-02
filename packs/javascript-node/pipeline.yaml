@@ -15,8 +15,8 @@ pipelines:
         - sh: jx step credential -s npmrc-token-nexus -k .npmrc -f ~/.npmrc --optional=true
     build:
       steps:
-      - sh: sleep 6000
-        name: DEBUG-sleep
+      - sh: cd ./apps/api && npm install
+        name: api-npm-install
         agent:
           image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: cd ./apps/api && npm run build
@@ -27,18 +27,18 @@ pipelines:
         name: container-build
         agent:
           image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
-    # postBuild:
-    #   steps:
-    #   - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION
-    #     name: post-build
-    # promote:
-    #   steps:
-    #   - dir: ./charts/preview
-    #     steps:
-    #     - sh: make preview
-    #       name: make-preview
-    #     - sh: "jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../.."
-    #       name: jx-preview
+    postBuild:
+      steps:
+      - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:$PREVIEW_VERSION
+        name: post-build
+    promote:
+      steps:
+      - dir: ./charts/preview
+        steps:
+        - sh: make preview
+          name: make-preview
+        - sh: "jx preview --app $APP_NAME --namespace=$APP_NAME-$BRANCH_NAME --dir ../.."
+          name: jx-preview
 
   release:
     setup:
@@ -47,10 +47,18 @@ pipelines:
         - sh: jx step credential -s npmrc-token-nexus -k .npmrc -f ~/.npmrc --optional=true
     build:
       steps:
-      - sh: npm run build
-        name: ui-build
+      - sh: cd ./apps/api && npm install
+        name: api-npm-install
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
+      - sh: cd ./apps/api && npm run build
+        name: api-build
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: export VERSION=`cat VERSION` && skaffold build -f skaffold.yaml
         name: container-build
+        agent:
+          image: ghcr.io/jenkins-x/builder-nodejs14x:2.1.155-778-patch3
       - sh: jx step post build --image $DOCKER_REGISTRY/$ORG/$APP_NAME:\$(cat VERSION)
         name: post-build
     promote:
