@@ -23,13 +23,13 @@ pipelines:
           echo "==============================" && \
           sleep 1200
         name: DEBUG-sleep
-        options:
-          containerOptions:
-            resources:
-              limits:
-                memory: 4Gi
-              requests:
-                memory: 4Gi
+      options:
+        containerOptions:
+          resources:
+            limits:
+              memory: 4Gi
+            requests:
+              memory: 4Gi
         agent:
           image: stackhawk/hawkscan:latest
   release:
