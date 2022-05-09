@@ -7,18 +7,16 @@ pipelineConfig:
   pipelines:
     pullRequest:
       pipeline:
-        stages:
-        - name: pullRequest
-          options:
-            containerOptions:
-              env:
-              - name: _JAVA_OPTIONS
-                value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
-              resources:
-                limits:
-                  memory: 4Gi
-                requests:
-                  memory: 4Gi
+        options:
+          containerOptions:
+            env:
+            - name: _JAVA_OPTIONS
+              value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
+            resources:
+              limits:
+                memory: 4Gi
+              requests:
+                memory: 4Gi
 pipelines:
   pullRequest:
     pipeline:
