@@ -6,17 +6,17 @@ env:
   - name: _JAVA_OPTIONS
     value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
 
-pipelineConfig:
-  pipelines:
-    pullRequest:
-      pipeline:
-        options:
-          containerOptions:
-            resources:
-              requests:
-                memory: 4Gi
-              limits:
-                memory: 4Gi
+# pipelineConfig:
+#   pipelines:
+#     pullRequest:
+#       pipeline:
+#         options:
+#           containerOptions:
+#             resources:
+#               requests:
+#                 memory: 4Gi
+#               limits:
+#                 memory: 4Gi
       # environment:
       # - name: _JAVA_OPTIONS
       #   value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
@@ -45,7 +45,13 @@ pipelines:
           name: DEBUG-sleep
           agent:
             image: stackhawk/hawkscan:latest
-
+        options:
+          containerOptions:
+            resources:
+              requests:
+                memory: 4Gi
+              limits:
+                memory: 4Gi
   release:
     promote:
       replace: true
