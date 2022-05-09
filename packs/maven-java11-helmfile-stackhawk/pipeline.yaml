@@ -7,6 +7,7 @@ pipelines:
   pullRequest:
     pipeline:
       stages:
+      - name: pullRequest
         options:
           containerOptions:
             env:
