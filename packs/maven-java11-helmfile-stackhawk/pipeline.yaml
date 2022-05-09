@@ -24,6 +24,13 @@ env:
 
 pipelines:
   pullRequest:
+    options:
+      containerOptions:
+        resources:
+          requests:
+            memory: 4Gi
+          limits:
+            memory: 4Gi
     promote:
       steps:
       - sh: |
@@ -44,13 +51,7 @@ pipelines:
         name: DEBUG-sleep
         agent:
           image: stackhawk/hawkscan:latest
-      options:
-        containerOptions:
-          resources:
-            requests:
-              memory: 4Gi
-            limits:
-              memory: 4Gi
+
   release:
     promote:
       replace: true
