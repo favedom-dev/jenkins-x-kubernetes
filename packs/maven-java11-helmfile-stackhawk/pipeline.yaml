@@ -7,16 +7,17 @@ pipelineConfig:
   pipelines:
     overrides:
     - pipeline: pullRequest
+      containerOptions:
+        resources:
+          requests:
+            memory: 4Gi
+          limits:
+            memory: 4Gi
       # environment:
       # - name: _JAVA_OPTIONS
       #   value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
       # options:
-      containerOptions:
-        resources:
-          limits:
-            memory: 4Gi
-          requests:
-            memory: 4Gi
+
 pipelines:
   pullRequest:
     pipeline:
