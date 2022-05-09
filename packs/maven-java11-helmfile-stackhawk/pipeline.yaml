@@ -23,6 +23,8 @@ pipelines:
           echo "==============================" && \
           sleep 1200
         name: DEBUG-sleep
+        agent:
+          image: stackhawk/hawkscan:latest
       options:
         containerOptions:
           resources:
@@ -30,8 +32,7 @@ pipelines:
               memory: 4Gi
             requests:
               memory: 4Gi
-        agent:
-          image: stackhawk/hawkscan:latest
+
   release:
     promote:
       replace: true
