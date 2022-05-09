@@ -5,18 +5,18 @@ env:
     value: https://github.com/favedom-dev/environment-favedom-dev-staging.git
 pipelineConfig:
   pipelines:
-    pullRequest:
-      pipeline:
-        environment:
-        - name: _JAVA_OPTIONS
-          value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
-        options:
-          containerOptions:
-            resources:
-              limits:
-                memory: 4Gi
-              requests:
-                memory: 4Gi
+    overrides:
+    - pipeline: pullRequest
+      # environment:
+      # - name: _JAVA_OPTIONS
+      #   value: -XX:+UnlockExperimentalVMOptions -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Xms10m -Xmx4g
+      # options:
+      containerOptions:
+        resources:
+          limits:
+            memory: 4Gi
+          requests:
+            memory: 4Gi
 pipelines:
   pullRequest:
     pipeline:
