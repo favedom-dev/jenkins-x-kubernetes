@@ -24,34 +24,33 @@ env:
 
 pipelines:
   pullRequest:
-    pipeline:
-      promote:
-        steps:
-        - sh: |
-            chmod -R 777 stackhawk && \
-            cd stackhawk && \
-            ./setup-hawkscan.sh
-          name: setup-stackhawk
-        - sh: |
-            cd ./stackhawk && \
-            export REPO_DIR=$(pwd) && \
-            export API_KEY=`cat HAWK_API_KEY` && \
-            export HAWK_MEM=`cat HAWK_MEM` && \
-            echo "==============================" && \
-            cat ./stackhawk.yml && \
-            echo "REPO_DIR: ${REPO_DIR}" && \
-            echo "==============================" && \
-            sleep 1200
-          name: DEBUG-sleep
-          agent:
-            image: stackhawk/hawkscan:latest
-        options:
-          containerOptions:
-            resources:
-              requests:
-                memory: 4Gi
-              limits:
-                memory: 4Gi
+    promote:
+      steps:
+      - sh: |
+          chmod -R 777 stackhawk && \
+          cd stackhawk && \
+          ./setup-hawkscan.sh
+        name: setup-stackhawk
+      - sh: |
+          export REPO_DIR=$(pwd) && \
+          export API_KEY=`cat HAWK_API_KEY` && \
+          export HAWK_MEM=`cat HAWK_MEM` && \
+          echo "==============================" && \
+          cat ./stackhawk.yml && \
+          echo "REPO_DIR: ${REPO_DIR}" && \
+          echo "==============================" && \
+          sleep 1200
+        dir: stackhawk/
+        name: DEBUG-sleep
+        agent:
+          image: stackhawk/hawkscan:latest
+      options:
+        containerOptions:
+          resources:
+            requests:
+              memory: 4Gi
+            limits:
+              memory: 4Gi
   release:
     promote:
       replace: true
