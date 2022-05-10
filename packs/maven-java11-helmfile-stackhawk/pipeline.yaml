@@ -20,15 +20,7 @@ pipelines:
           cd stackhawk && \
           ./setup-hawkscan.sh
         name: setup-stackhawk
-      - sh: |
-          export REPO_DIR=$(pwd) && \
-          export API_KEY=`cat HAWK_API_KEY` && \
-          export HAWK_MEM=`cat HAWK_MEM` && \
-          echo "==============================" && \
-          cat ./stackhawk.yml && \
-          echo "REPO_DIR: ${REPO_DIR}" && \
-          echo "==============================" && \
-          sleep 1200
+      - sh: sleep 1200
         dir: stackhawk/
         name: DEBUG-sleep
       # - sh: kubectl apply -f stackhawk-job.yaml
