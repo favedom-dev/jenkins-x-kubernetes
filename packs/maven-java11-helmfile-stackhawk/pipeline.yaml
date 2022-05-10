@@ -13,6 +13,6 @@ pipelines:
           cd stackhawk && \
           ./setup-hawkscan.sh
         name: setup-stackhawk
-      - sh: kubectl replace -f stackhawk-job.yaml
+      - sh: kubectl replace --force -f stackhawk-job.yaml
         dir: stackhawk/
         name: run-stackhawk
