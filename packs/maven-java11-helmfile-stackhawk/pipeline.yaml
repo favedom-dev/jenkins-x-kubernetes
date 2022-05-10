@@ -6,13 +6,6 @@ env:
 
 pipelines:
   pullRequest:
-    options:
-      containerOptions:
-        resources:
-          requests:
-            memory: 4Gi
-          limits:
-            memory: 4Gi
     promote:
       steps:
       - sh: |
@@ -20,12 +13,9 @@ pipelines:
           cd stackhawk && \
           ./setup-hawkscan.sh
         name: setup-stackhawk
-      - sh: sleep 1200
+      - sh: kubectl apply -f stackhawk-job.yaml
         dir: stackhawk/
-        name: DEBUG-sleep
-      # - sh: kubectl apply -f stackhawk-job.yaml
-      #   dir: stackhawk/
-      #   name: run-stackhawk
+        name: run-stackhawk
 
   release:
     promote:
