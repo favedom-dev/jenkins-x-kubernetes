@@ -16,3 +16,6 @@ pipelines:
       - sh: kubectl replace --force -f stackhawk-job.yaml
         dir: stackhawk/
         name: run-stackhawk
+      - sh: ./wait-stackawk.sh
+        dir: stackhawk/
+        name: wait-stackhawk
