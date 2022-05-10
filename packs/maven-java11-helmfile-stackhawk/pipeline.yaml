@@ -49,8 +49,9 @@ pipelines:
           sleep 1200
         dir: stackhawk/
         name: DEBUG-sleep
-        agent:
-          image: stackhawk/hawkscan:latest
+      # - sh: kubectl apply -f stackhawk-job.yaml
+      #   dir: stackhawk/
+      #   name: run-stackhawk
 
   release:
     promote:
