@@ -1,0 +1,20 @@
+extends:
+  import: classic
+  file: ../javascript-ui-nginx-helmfile/pipeline.yaml
+
+pipelines:
+  pullRequest:
+    promote:
+      steps:
+      - sh: |
+          chmod -R 777 stackhawk && \
+          cd stackhawk && \
+          ./setup-hawkscan.sh
+        name: setup-stackhawk
+      - sh: kubectl replace --force -f stackhawk-job.yaml
+        dir: stackhawk/
+        name: run-stackhawk
+
+      - sh: ./wait-stackawk.sh
+        dir: stackhawk/
+        name: wait-stackhawk
