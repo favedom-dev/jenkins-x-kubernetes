@@ -55,6 +55,8 @@ pipelines:
             export JX_LOG_LEVEL=info
             jx step helm release
           name: helm-release
+        - sh: sleep 600
+          name: DEBUG-sleep
         - comment: promote through all 'Auto' promotion Environments
           sh: |
             jx step create pr regex \
