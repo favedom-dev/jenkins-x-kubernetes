@@ -7,7 +7,7 @@ agent:
   container: maven
 env:
   - name: PROMOTE_REPO_URL
-    value: https://github.com/favedom-dev/environment-favedom-dev-staging.git  
+    value: https://github.com/favedom-dev/environment-favedom-dev-staging.git
 pipelines:
   pullRequest:
     setup:
@@ -51,7 +51,9 @@ pipelines:
         - sh: jx step changelog --version v\$(cat ../../VERSION)
           name: changelog
         - comment: release the helm chart
-          sh: jx step helm release
+          sh: |
+            export JX_LOG_LEVEL=info
+            jx step helm release
           name: helm-release
         - comment: promote through all 'Auto' promotion Environments
           sh: |
@@ -59,5 +61,5 @@ pipelines:
               --regex "^.*- name:.*$APP_NAME\n.*version: (?P<version>.*)\$" \
               --version \$(cat ../../VERSION) \
               --files helmfile.yaml \
-              --repo $PROMOTE_REPO_URL 
+              --repo $PROMOTE_REPO_URL
           name: jx-promote
