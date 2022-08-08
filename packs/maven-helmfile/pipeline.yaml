@@ -50,15 +50,15 @@ pipelines:
         steps:
         - sh: jx step changelog --version v\$(cat ../../VERSION)
           name: changelog
-        - sh: sleep 600
-          name: DEBUG-sleep1
+        # - sh: sleep 600
+        #   name: DEBUG-sleep1
         - comment: release the helm chart
           sh: |
             export JX_LOG_LEVEL=info
             jx step helm release
           name: helm-release
-        - sh: sleep 600
-          name: DEBUG-sleep2
+        # - sh: sleep 600
+        #   name: DEBUG-sleep2
         - comment: promote through all 'Auto' promotion Environments
           sh: |
             jx step create pr regex \
